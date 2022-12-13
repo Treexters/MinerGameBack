@@ -16,8 +16,7 @@ Right now no game is there, just experiments with ton api
 4. Now go to `http://127.0.0.1:5000` and proceed from there
 
 # List of available endpoints for now
-`/check/<address>` - head-only info about collection with specified address
-`/account/<account>` - head-only info about account with specified address
-`/nft_by_wallet/<wallet>` - list of nft bound to an account (on sale ones are filtered)
-`/nft_by_wallet/<wallet>/preview` - image previews of nft bound to an account (with on sale ones)
-``
+- `/check/<address>` - head-only info about collection with specified address
+- `/account/<account>` - head-only info about account with specified address
+- `/nft_by_wallet/<wallet>` - list of nft bound to an account (on sale ones are filtered)
+- `/nft_by_wallet/<wallet>/preview` - image previews of nft bound to an account (with on sale ones)
