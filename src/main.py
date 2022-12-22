@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from server.miner_game_server import MinerGameServer
+from whales.whales_requests import WhalesReqs
 
 app = Flask(__name__)
 
@@ -23,6 +24,13 @@ def get_wallet_nft(wallet):
 @app.route('/nft_by_wallet/<string:wallet>/preview', methods=['GET'])
 def preview_wallet_nft(wallet):
     response = game_server.preview_wallet_nft(wallet)
+    return response
+
+whales_reqs = WhalesReqs()
+
+@app.route('/rs_by_whale/<string:whale>', methods=['GET'])
+def get_full_rs(whale):
+    response = whales_reqs.get_full_rs(whale)
     return response
 
 if __name__ == '__main__':
