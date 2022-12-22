@@ -21,3 +21,4 @@ Right now no game is there, just experiments with ton api
 - `/account/<account>` - head-only info about account with specified address
 - `/nft_by_wallet/<wallet>` - list of nft bound to an account (on sale ones are filtered)
 - `/nft_by_wallet/<wallet>/preview` - image previews of nft bound to an account (with on sale ones)
+- `/rs_by_whale/<whale>` - returns a full rarity score of a whale NFT
