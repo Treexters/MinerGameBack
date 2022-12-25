@@ -23,3 +23,4 @@ Right now no game is there, just experiments with ton api
 - `/nft_by_wallet/<wallet>/preview` - image previews of nft bound to an account (with on sale ones)
 - `/rs_by_whale/<whale>` - returns a full rarity score of a whale NFT
 - `/floor_by_collection/<collection>` - returns a floor price with floor NFT name in collection (if multiple NFT have floor price the name will be from first by id)
+- `/average_collection_price/<collection>` - returns average price of the middle 50% collection items prices (25% lowest and 25% highest prices are ignored to avoid auctions and abnormally high prices)

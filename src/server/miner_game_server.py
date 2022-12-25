@@ -2,6 +2,7 @@ import os
 import time
 import requests
 import json
+import statistics
 
 TON_API_URL = "https://tonapi.io"
 TON_API_VERSION = "v1"
@@ -77,6 +78,43 @@ class MinerGameServer():
         floor_price = float(floor_nft["sale"]["price"]["value"])/TON_NANO_DIVIDER
         floor_nft_name = floor_nft["metadata"]["name"]
         return f"{floor_price} ({floor_nft_name})"
+
+    def get_average_collection_price(self, collection_address):
+        collection = self.get_collection(collection_address).json()
+        total_items = int(collection["next_item_index"])
+
+        if total_items == -1:
+            # Out of scope due to
+            #  https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#get-methods-1
+            # -1 value of next_item_index is used to indicate non-sequential collections, such collections
+            # should provide their own way for index generation / item enumeration
+            return "Not supported NFT collection enumeration"
+
+        limit = 1000
+        nfts: list[dict] = []
+        for offset in range(0, total_items, limit):
+            params = {
+                "collection": collection_address,
+                "limit": limit,
+                "offset": offset,
+            }
+            response = self._request(SEARCH_NFT_URL, params)
+            nfts.extend(response.json()["nft_items"])
+            # To not spam server
+            time.sleep(1)
+
+        on_sale = [nft for nft in nfts if "sale" in nft]
+        on_sale.sort(key=lambda x: int(x["sale"]["price"]["value"]))
+        count = len(on_sale)
+        prices: list[float] = []
+        for i in range(int(count/4)):
+            del on_sale[0]
+            del on_sale[len(on_sale)-1]
+        for nft in on_sale:
+            prices.extend([float(nft["sale"]["price"]["value"])])
+
+        return f"Average: {str(statistics.fmean(prices)/TON_NANO_DIVIDER)}"
+
 
     def preview_wallet_nft(self, wallet):
         params = {

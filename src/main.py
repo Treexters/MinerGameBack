@@ -31,6 +31,11 @@ def get_floor_by_collection(collection):
     response = game_server.get_floor_by_collection(collection)
     return response
 
+@app.route('/average_collection_price/<string:collection>', methods=['GET'])
+def get_average_collection_price(collection):
+    response = game_server.get_average_collection_price(collection)
+    return response
+
 whales_reqs = WhalesReqs()
 
 @app.route('/rs_by_whale/<string:whale>', methods=['GET'])
