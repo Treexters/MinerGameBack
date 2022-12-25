@@ -106,6 +106,8 @@ class MinerGameServer():
         on_sale = [nft for nft in nfts if "sale" in nft]
         on_sale.sort(key=lambda x: int(x["sale"]["price"]["value"]))
         count = len(on_sale)
+        if count < 10:
+            return "Less than 10 items on sale, it's better to check this collection manually"
         prices: list[float] = []
         for i in range(int(count/4)):
             del on_sale[0]
