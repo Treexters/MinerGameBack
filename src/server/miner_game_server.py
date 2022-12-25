@@ -103,7 +103,7 @@ class MinerGameServer():
             # To not spam server
             time.sleep(1)
 
-        on_sale = [nft for nft in nfts if "sale" in nft]
+        on_sale = [nft for nft in nfts if "sale" in nft and int(nft["sale"]["price"]["value"]) > 0]
         on_sale.sort(key=lambda x: int(x["sale"]["price"]["value"]))
         count = len(on_sale)
         if count < 10:
