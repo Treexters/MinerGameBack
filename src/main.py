@@ -40,7 +40,13 @@ whales_reqs = WhalesReqs()
 
 @app.route('/rs_by_whale/<string:whale>', methods=['GET'])
 def get_full_rs(whale):
-    response = whales_reqs.get_full_rs(whale)
+    wh_score, wh_address = whales_reqs.get_full_rs(whale)
+    response = f"The full score of the whale #{whale} is {wh_score}"
+    return response
+
+@app.route('/top10_whales_on_sale/', methods=['GET'])
+def top10_whales_on_sale():
+    response = whales_reqs.top10_whales_on_sale()
     return response
 
 if __name__ == '__main__':

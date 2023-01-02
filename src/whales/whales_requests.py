@@ -1,5 +1,14 @@
 import requests
 import json
+import time
+import html
+import operator
+from prettytable import PrettyTable
+from src.server.miner_game_server import MinerGameServer
+from src.server.miner_game_server import TON_NANO_DIVIDER
+
+SEARCH_NFT_URL = "nft/searchItems"
+game_server = MinerGameServer()
 
 headers = {
     'authority': 'whales-club-bot-34uqt.ondigitalocean.app',
@@ -19,17 +28,70 @@ headers = {
 }
 
 class WhalesReqs():
-    def get_full_rs(self, whale_id):
+    def get_full_rs(self, whale_number):
+        #print("Looking for the whale #" + str(whale_number) + " score")
         json_data = {
-            'index': whale_id,
+            "index": whale_number,
         }
-        response = requests.post('https://whales-club-bot-34uqt.ondigitalocean.app/api/bot/nft', headers=headers, json=json_data).text
+        response = requests.post("https://whales-club-bot-34uqt.ondigitalocean.app/api/bot/nft", headers=headers, json=json_data).text
         whale_json = json.loads(response)
-        response = 'Whale not found'
-        for nfts in whale_json['nfts']:
-            if 'fullScore' in nfts:
-                full_score = nfts['fullScore']
-                response = 'The full score of the whale №' + str(whale_id) + ' is ' + str(full_score)
+        response = "Whale №" + str(whale_number) + " not found"
+        for nfts in whale_json["nfts"]:
+            if "fullScore" in nfts:
+                full_score = int(nfts["fullScore"])
+                address = str(nfts["address"])
+                response = "The full score of the whale №" + str(whale_number) + " is " + str(full_score)
             else:
-                response = 'Whale score is not defined'
-        return response
+                response = "Whale №" + str(whale_number) + " score is not defined"
+        print(response)
+        return full_score, address
+
+    def top10_whales_on_sale(self):
+        collection_address = "EQDvRFMYLdxmvY3Tk-cfWMLqDnXF_EclO2Fp4wwj33WhlNFT"
+        collection = game_server.get_collection(collection_address).json()
+        total_items = int(collection["next_item_index"])
+
+        if total_items == -1:
+            # Out of scope due to
+            #  https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#get-methods-1
+            # -1 value of next_item_index is used to indicate non-sequential collections, such collections
+            # should provide their own way for index generation / item enumeration
+            return "Not supported NFT collection enumeration"
+
+        limit = 1000
+        nfts: list[dict] = []
+        for offset in range(0, total_items, limit):
+            params = {
+                "collection": collection_address,
+                "limit": limit,
+                "offset": offset,
+            }
+            response = game_server._request(SEARCH_NFT_URL, params)
+            nfts.extend(response.json()["nft_items"])
+            # To not spam server
+            time.sleep(1)
+
+        on_sale = [nft for nft in nfts if "sale" in nft and int(nft["sale"]["price"]["value"]) > 0]
+
+        whales_table = PrettyTable(["Whale", "Price", "Rarity", "Price/Rarity"])
+        whales_list = [[], []]
+
+        for nft in on_sale:
+            wh_name = nft["metadata"]["name"]
+            wh_number = wh_name[wh_name.rfind("#")+1:]
+            wh_img_name = f"<img src='https://whales.infura-ipfs.io/ipfs/QmQ5QiuLBEmDdQmdWcEEh2rsW53KWahc63xmPVBUSp4teG/{wh_number}.png' style='max-width: 100%; max-height: 100%; width: 100px;'/>"
+            wh_img_name = f"<p style='margin-bottom: 10px;'>{wh_img_name}</br>"
+            wh_price = float(nft["sale"]["price"]["value"])/TON_NANO_DIVIDER
+            wh_rarity, wh_address = self.get_full_rs(wh_number)
+            wh_index = round(wh_price/wh_rarity, 3)
+            wh_img_name = f"{wh_img_name}<a href='https://getgems.io/collection/{collection_address}/{wh_address}' target='_blank'>{wh_name}</a></p>"
+            wh_rarity = f"<a href='https://tonwhales.com/club/preview/{wh_number}' target='_blank'>{wh_rarity}</a>"
+            whales_table.add_row([wh_img_name, wh_price, wh_rarity, wh_index])
+
+        whales_table.align = "l"
+        top_whales = whales_table.get_html_string(start=0, end=10, sortby="Price/Rarity", format=True)
+        top_whales = html.unescape(top_whales)
+
+        wh_html_page = f"<body>{top_whales}</body>"
+
+        return wh_html_page
