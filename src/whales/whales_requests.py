@@ -46,7 +46,7 @@ class WhalesReqs():
         print(response)
         return full_score, address
 
-    def top10_whales_on_sale(self):
+    def top_whales_on_sale(self):
         collection_address = "EQDvRFMYLdxmvY3Tk-cfWMLqDnXF_EclO2Fp4wwj33WhlNFT"
         collection = game_server.get_collection(collection_address).json()
         total_items = int(collection["next_item_index"])
@@ -89,9 +89,21 @@ class WhalesReqs():
             whales_table.add_row([wh_img_name, wh_price, wh_rarity, wh_index])
 
         whales_table.align = "l"
-        top_whales = whales_table.get_html_string(start=0, end=10, sortby="Price/Rarity", format=True)
-        top_whales = html.unescape(top_whales)
+        top_whales_1 = whales_table.get_html_string(start=0, end=10, sortby="Price/Rarity", format=True, attributes={"align":"right"})
+        top_whales_1 = html.unescape(top_whales_1)
+        top_whales_2 = whales_table.get_html_string(start=10, end=20, sortby="Price/Rarity", format=True, attributes={"align":"center"})
+        top_whales_2 = html.unescape(top_whales_2)
+        top_whales_3 = whales_table.get_html_string(start=20, end=30, sortby="Price/Rarity", format=True, attributes={"align":"left"})
+        top_whales_3 = html.unescape(top_whales_3)
 
-        wh_html_page = f"<body>{top_whales}</body>"
+        wh_html_page = f"<body style='text-align: center'><h style='font-size: 40; font-weight: bold'>Top 30 whales NFT on sale by price/rarity</h>" \
+                       f"</br><p'>Find more about the Whales Club here: <a href='https://tonwhales.com/club' target='_blank'>tonwhales.com/club</a></p><div>" \
+                       f"<div style='float: left; width: calc(100%/3); text-align: right'>" \
+                       f"<h style='font-size: 30; font-weight: bold'>1-10</h></br>{top_whales_1}</div>" \
+                       f"<div style='float: left; width: calc(100%/3); text-align: center'>" \
+                       f"<h style='font-size: 30; font-weight: bold'>11-20</h></br>{top_whales_2}</div>" \
+                       f"<div style='float: left; width: calc(100%/3); text-align: left'>" \
+                       f"<h style='font-size: 30; font-weight: bold'>21-30</h></br>{top_whales_3}</div>" \
+                       f"</div></body>"
 
         return wh_html_page

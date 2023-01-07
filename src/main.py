@@ -44,9 +44,9 @@ def get_full_rs(whale):
     response = f"The full score of the whale #{whale} is {wh_score}"
     return response
 
-@app.route('/top10_whales_on_sale/', methods=['GET'])
-def top10_whales_on_sale():
-    response = whales_reqs.top10_whales_on_sale()
+@app.route('/top_whales_on_sale/', methods=['GET'])
+def top_whales_on_sale():
+    response = whales_reqs.top_whales_on_sale()
     return response
 
 if __name__ == '__main__':
