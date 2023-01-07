@@ -2,7 +2,7 @@ import requests
 import json
 import time
 import html
-import operator
+import datetime
 from prettytable import PrettyTable
 from src.server.miner_game_server import MinerGameServer
 from src.server.miner_game_server import TON_NANO_DIVIDER
@@ -96,8 +96,11 @@ class WhalesReqs():
         top_whales_3 = whales_table.get_html_string(start=20, end=30, sortby="Price/Rarity", format=True, attributes={"align":"left"})
         top_whales_3 = html.unescape(top_whales_3)
 
+        page_made_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+
         wh_html_page = f"<body style='text-align: center'><h style='font-size: 40; font-weight: bold'>Top 30 whales NFT on sale by price/rarity</h>" \
-                       f"</br><p'>Find more about the Whales Club here: <a href='https://tonwhales.com/club' target='_blank'>tonwhales.com/club</a></p><div>" \
+                       f"</br><p>Find more about the Whales Club here: <a href='https://tonwhales.com/club' target='_blank'>tonwhales.com/club</a></p>" \
+                       f"<p>The page was generated at {page_made_date} (GMT+3)</p><div>" \
                        f"<div style='float: left; width: calc(100%/3); text-align: right'>" \
                        f"<h style='font-size: 30; font-weight: bold'>1-10</h></br>{top_whales_1}</div>" \
                        f"<div style='float: left; width: calc(100%/3); text-align: center'>" \
