@@ -49,5 +49,34 @@ def top_whales_on_sale():
     response = whales_reqs.top_whales_on_sale()
     return response
 
+@app.route('/ton_connect_shenanigans/', methods=['GET'])
+def ton_connect_shenanigans():
+    response = """<script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
+    <script>
+        const connector = new TonConnectSDK.TonConnect({ manifestUrl: 'http://127.0.0.1:5000/ton_connect_json' });
+
+        connector.restoreConnection();
+        const walletsList = connector.getWallets();
+
+        walletsList.then(function(result) {
+            str = JSON.stringify(result, null, 4);
+            alert(str)
+        });
+        
+    </script>
+    """
+    return response
+
+@app.route('/ton_connect_json/', methods=['GET'])
+def ton_connect_json():
+    response = """
+    {
+    "url": "http://127.0.0.1:5000/",
+    "name": "MinerGame",
+    "iconUrl": "https://img.icons8.com/wired/512/share-2.png"
+    }
+    """
+    return response
+
 if __name__ == '__main__':
     app.run(debug=True)
