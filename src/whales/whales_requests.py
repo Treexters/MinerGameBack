@@ -4,8 +4,8 @@ import time
 import html
 import datetime
 from prettytable import PrettyTable
-from server.miner_game_server import MinerGameServer
-from server.miner_game_server import TON_NANO_DIVIDER
+from src.server.miner_game_server import MinerGameServer
+from src.server.miner_game_server import TON_NANO_DIVIDER
 
 SEARCH_NFT_URL = "nft/searchItems"
 game_server = MinerGameServer()
@@ -88,25 +88,24 @@ class WhalesReqs():
             wh_rarity = f"<a href='https://tonwhales.com/club/preview/{wh_number}' target='_blank'>{wh_rarity}</a>"
             whales_table.add_row([wh_img_name, wh_price, wh_rarity, wh_index])
 
-        whales_table.align = "l"
-        top_whales_1 = whales_table.get_html_string(start=0, end=10, sortby="Price/Rarity", format=True, attributes={"align":"right"})
+        top_whales_1 = whales_table.get_html_string(start=0, end=10, sortby="Price/Rarity", format=True, attributes={"align":"center"})
         top_whales_1 = html.unescape(top_whales_1)
         top_whales_2 = whales_table.get_html_string(start=10, end=20, sortby="Price/Rarity", format=True, attributes={"align":"center"})
         top_whales_2 = html.unescape(top_whales_2)
-        top_whales_3 = whales_table.get_html_string(start=20, end=30, sortby="Price/Rarity", format=True, attributes={"align":"left"})
+        top_whales_3 = whales_table.get_html_string(start=20, end=30, sortby="Price/Rarity", format=True, attributes={"align":"center"})
         top_whales_3 = html.unescape(top_whales_3)
 
         page_made_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
         wh_html_page = f"<body style='text-align: center'><h style='font-size: 40; font-weight: bold'>Top 30 whales NFT on sale by price/rarity</h>" \
                        f"</br><p>Find more about the Whales Club here: <a href='https://tonwhales.com/club' target='_blank'>tonwhales.com/club</a></p>" \
-                       f"<p>The page was generated at {page_made_date} (GMT+3)</p><div>" \
-                       f"<div style='float: left; width: calc(100%/3); text-align: right'>" \
-                       f"<h style='font-size: 30; font-weight: bold'>1-10</h></br>{top_whales_1}</div>" \
-                       f"<div style='float: left; width: calc(100%/3); text-align: center'>" \
-                       f"<h style='font-size: 30; font-weight: bold'>11-20</h></br>{top_whales_2}</div>" \
-                       f"<div style='float: left; width: calc(100%/3); text-align: left'>" \
-                       f"<h style='font-size: 30; font-weight: bold'>21-30</h></br>{top_whales_3}</div>" \
+                       f"<p>The page was generated at {page_made_date} (GMT+3)</p><div style='margin: 0 auto; width: 70%; min-width: 400px;'>" \
+                       f"<div style='float: left; width: calc(100%/3); min-width: 400px'>" \
+                       f"<p style='margin: 0 auto; font-size: 30; font-weight: bold'>1-10</p>{top_whales_1}</div>" \
+                       f"<div style='float: left; width: calc(100%/3); min-width: 400px'>" \
+                       f"<p style='margin: 0 auto; font-size: 30; font-weight: bold'>11-20</p>{top_whales_2}</div>" \
+                       f"<div style='float: left; width: calc(100%/3); min-width: 400px'>" \
+                       f"<p style='margin: 0 auto; font-size: 30; font-weight: bold'>21-30</p>{top_whales_3}</div>" \
                        f"</div></body>"
 
         return wh_html_page
