@@ -106,7 +106,9 @@ class WhalesReqs():
                        "div:nth-child(1), div:nth-child(2), div:nth-child(3) {float: left; width: calc(100%/3); min-width: 400px; padding: 10px; box-sizing: border-box;}</style>" \
                        f"<body><h>Top 30 whales NFT on sale by price/rarity</h>" \
                        f"</br><p>Find more about the Whales Club here: <a href='https://tonwhales.com/club' target='_blank'>tonwhales.com/club</a></p>" \
-                       f"<p>The page was generated at {page_made_date} (GMT+3)</p><div style='margin: 0 auto; width: 70%; min-width: 400px;'><div><p>1-10</p>{top_whales_1}</div>" \
-                       f"<div><p>11-20</p>{top_whales_2}</div><div><p>21-30</p>{top_whales_3}</div></div></body>"
+                       f"<p>The page was generated at {page_made_date} (GMT+3)</p><div style='margin: 0 auto; width: 70%; min-width: 400px;'><div>" \
+                       f"<p style='margin: 0 auto; font-size: 30; font-weight: bold'>1-10</p>{top_whales_1}</div>" \
+                       f"<div><p style='margin: 0 auto; font-size: 30; font-weight: bold'>11-20</p>{top_whales_2}</div><div>" \
+                       f"<p style='margin: 0 auto; font-size: 30; font-weight: bold'>21-30</p>{top_whales_3}</div></div></body>"
 
         return wh_html_page
