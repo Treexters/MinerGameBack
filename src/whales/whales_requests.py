@@ -97,15 +97,16 @@ class WhalesReqs():
 
         page_made_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
-        wh_html_page = f"<body style='text-align: center'><h style='font-size: 40; font-weight: bold'>Top 30 whales NFT on sale by price/rarity</h>" \
+        wh_html_page = "<style>body {text-align: center; background-color: #0c2340; color: white;} h {font-size: 40px; font-weight: bold; color: #00bfff;}" \
+                       "a {color: #00bfff; text-decoration: none;}" \
+                       "table {border-collapse: collapse; width: 100%; max-width: 800px; margin: 0 auto; background-color: #1a5276; box-shadow: 0px 0px 10px #00bfff;}" \
+                       "th, td {padding: 10px; text-align: center; border: 1px solid white;} th {background-color: #0c2340; color: #00bfff; font-weight: bold;}" \
+                       "tr:nth-child(even) {background-color: #154360;}" \
+                       "img {max-width: 100%; max-height: 100%; width: 100px;} p {font-size: 20px; margin-bottom: 10px;}" \
+                       "div:nth-child(1), div:nth-child(2), div:nth-child(3) {float: left; width: calc(100%/3); min-width: 400px; padding: 10px; box-sizing: border-box;}</style>" \
+                       f"<body><h>Top 30 whales NFT on sale by price/rarity</h>" \
                        f"</br><p>Find more about the Whales Club here: <a href='https://tonwhales.com/club' target='_blank'>tonwhales.com/club</a></p>" \
-                       f"<p>The page was generated at {page_made_date} (GMT+3)</p><div style='margin: 0 auto; width: 70%; min-width: 400px;'>" \
-                       f"<div style='float: left; width: calc(100%/3); min-width: 400px'>" \
-                       f"<p style='margin: 0 auto; font-size: 30; font-weight: bold'>1-10</p>{top_whales_1}</div>" \
-                       f"<div style='float: left; width: calc(100%/3); min-width: 400px'>" \
-                       f"<p style='margin: 0 auto; font-size: 30; font-weight: bold'>11-20</p>{top_whales_2}</div>" \
-                       f"<div style='float: left; width: calc(100%/3); min-width: 400px'>" \
-                       f"<p style='margin: 0 auto; font-size: 30; font-weight: bold'>21-30</p>{top_whales_3}</div>" \
-                       f"</div></body>"
+                       f"<p>The page was generated at {page_made_date} (GMT+3)</p><div style='margin: 0 auto; width: 70%; min-width: 400px;'><div><p>1-10</p>{top_whales_1}</div>" \
+                       f"<div><p>11-20</p>{top_whales_2}</div><div><p>21-30</p>{top_whales_3}</div></div></body>"
 
         return wh_html_page
