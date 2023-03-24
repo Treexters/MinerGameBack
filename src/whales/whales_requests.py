@@ -74,17 +74,16 @@ class WhalesReqs():
         on_sale = [nft for nft in nfts if "sale" in nft and int(nft["sale"]["price"]["value"]) > 0]
 
         whales_table = PrettyTable(["Whale", "Price", "Rarity", "Price/Rarity"])
-        whales_list = [[], []]
+        #whales_list = [[], []]
 
         for nft in on_sale:
             wh_name = nft["metadata"]["name"]
             wh_number = wh_name[wh_name.rfind("#")+1:]
-            wh_img_name = f"<img src='https://whales.infura-ipfs.io/ipfs/QmQ5QiuLBEmDdQmdWcEEh2rsW53KWahc63xmPVBUSp4teG/{wh_number}.png' style='max-width: 100%; max-height: 100%; width: 100px;'/>"
-            wh_img_name = f"<p style='margin-bottom: 10px;'>{wh_img_name}</br>"
+            wh_img_name = f"<img src='https://whales.infura-ipfs.io/ipfs/QmQ5QiuLBEmDdQmdWcEEh2rsW53KWahc63xmPVBUSp4teG/{wh_number}.png' style='width: auto; height: auto;'/>"
             wh_price = float(nft["sale"]["price"]["value"])/TON_NANO_DIVIDER
             wh_rarity, wh_address = self.get_full_rs(wh_number)
             wh_index = round(wh_price/wh_rarity, 3)
-            wh_img_name = f"{wh_img_name}<a href='https://getgems.io/collection/{collection_address}/{wh_address}' target='_blank'>{wh_name}</a></p>"
+            wh_img_name = f"<a href='https://getgems.io/collection/{collection_address}/{wh_address}' target='_blank'>{wh_img_name}</a></p>"
             wh_rarity = f"<a href='https://tonwhales.com/club/preview/{wh_number}' target='_blank'>{wh_rarity}</a>"
             whales_table.add_row([wh_img_name, wh_price, wh_rarity, wh_index])
 
@@ -100,8 +99,8 @@ class WhalesReqs():
         wh_html_page = "<style>body {text-align: center; background-color: #0c2340; color: white;} h {font-size: 40px; font-weight: bold; color: #00bfff;}" \
                        "a {color: #00bfff; text-decoration: none;}" \
                        "table {border-collapse: collapse; width: 100%; max-width: 800px; margin: 0 auto; background-color: #1a5276; box-shadow: 0px 0px 10px #00bfff;}" \
-                       "th, td {padding: 10px; text-align: center; border: 1px solid white;} th {background-color: #0c2340; color: #00bfff; font-weight: bold;}" \
-                       "tr:nth-child(even) {background-color: #154360;}" \
+                       "td {text-align: center; vertical-align: middle !important; border: 1px solid white; padding-left: 0 !important; padding-right: 0 !important;}" \
+                       "th {text-align: center; border: 1px solid white; background-color: #0c2340; color: #00bfff; font-weight: bold;} tr:nth-child(even) {background-color: #154360;}" \
                        "img {max-width: 100%; max-height: 100%; width: 100px;} p {font-size: 20px; margin-bottom: 10px;}" \
                        "div:nth-child(1), div:nth-child(2), div:nth-child(3) {float: left; width: calc(100%/3); min-width: 400px; padding: 10px; box-sizing: border-box;}</style>" \
                        f"<body><h>Top 30 whales NFT on sale by price/rarity</h>" \
