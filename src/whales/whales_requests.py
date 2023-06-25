@@ -4,8 +4,8 @@ import time
 import html
 import datetime
 from prettytable import PrettyTable
-from src.server.miner_game_server import MinerGameServer
-from src.server.miner_game_server import TON_NANO_DIVIDER
+from server.miner_game_server import MinerGameServer
+from server.miner_game_server import TON_NANO_DIVIDER
 
 SEARCH_NFT_URL = "nft/searchItems"
 game_server = MinerGameServer()

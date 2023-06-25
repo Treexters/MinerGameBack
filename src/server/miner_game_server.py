@@ -3,6 +3,8 @@ import time
 import requests
 import json
 import statistics
+import sqlite3
+from sqlite3 import Connection, Cursor
 
 TON_API_URL = "https://tonapi.io"
 TON_API_VERSION = "v1"
@@ -14,6 +16,14 @@ SERVER_SIDE_KEY = os.getenv("SERVER_SIDE_KEY")
 TON_NANO_DIVIDER = 1000000000.000
 
 class MinerGameServer():
+    __db_connection: Connection
+    cursor: Cursor
+
+    def __init__(self) -> None:
+        self.__db_connection = sqlite3.connect("local.db")
+        self.cursor = self.__db_connection.cursor()
+                
+
     def _request(self, action, params, extra_headers = None):
         url = "/".join([TON_API_URL, TON_API_VERSION, action])
 
