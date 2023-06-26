@@ -1,9 +1,11 @@
 from flask import Flask, jsonify
 from server.miner_game_server import MinerGameServer
 from whales.whales_requests import WhalesReqs
+from flask_socketio import SocketIO
+import eventlet
 
 app = Flask(__name__)
-
+socketio = SocketIO(app, cors_allowed_origins='*')
 game_server = MinerGameServer()
 
 @app.route('/check/<string:address>', methods=['GET'])
@@ -78,5 +80,11 @@ def ton_connect_json():
     """
     return response
 
+@socketio.on('connect')
+def test_connect(auth):
+    pass
+    #socketio.emit('my response', {'data': 'Connected'})
+    #socketio.send("Hello")
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app, debug=True, port=5001)

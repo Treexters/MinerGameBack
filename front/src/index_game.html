@@ -3,9 +3,18 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script src="/asset/phaser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 </head>
 <body>
-
+    <script type="text/javascript" charset="utf-8">
+        var socket = io("http://127.0.0.1:5001");
+        // socket.on('connect', function() {
+        //     socket.emit('my event', {data: 'I\'m connected!'});
+        // });
+        socket.on('message', function (message) {
+            alert(message);
+        });
+    </script>
     <script>
         var config = {
         type: Phaser.AUTO,
