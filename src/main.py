@@ -1,7 +1,7 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from server.miner_game_server import MinerGameServer
 from whales.whales_requests import WhalesReqs
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, join_room
 import eventlet
 
 app = Flask(__name__)
@@ -81,10 +81,25 @@ def ton_connect_json():
     return response
 
 @socketio.on('connect')
-def test_connect(auth):
+def test_connect():
+    # TODO: Remove on production stage. 
+    # Send sid to client for debug purposes
+    socketio.send(request.sid, to=request.sid)
+
+@socketio.on('auth')
+def auth(data):
+    wallet = data["wallet"]
+    token = data["token"]
+
+    # TODO: TON Connect 2.0 check token or whatever it gives
     pass
-    #socketio.emit('my response', {'data': 'Connected'})
-    #socketio.send("Hello")
+
+    # Put client to a room with wallet as key
+    join_room(wallet)
+
+    # TODO: Remove on production stage
+    # Send debug output to exactly this wallet clients
+    socketio.send(f"Auth with wallet {wallet} was successfull", to=wallet)
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, port=5001)

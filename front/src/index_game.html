@@ -8,11 +8,8 @@
 <body>
     <script type="text/javascript" charset="utf-8">
         var socket = io("http://127.0.0.1:5001");
-        // socket.on('connect', function() {
-        //     socket.emit('my event', {data: 'I\'m connected!'});
-        // });
         socket.on('message', function (message) {
-            alert(message);
+            console.log(message);
         });
     </script>
     <script>
@@ -76,6 +73,11 @@
 
                     //  Populate the text with whatever they typed in as the username!
                     text.setText('Дарова ' + inputWallet.value + '. Но тут пока ничего нет!');
+
+                    // Send auth info to server
+                    // Here should be TON Connect 2.0 code which recieves... something like token I suppose
+                    // But since we have no TON Connect yet, send plain wallet. Yay!
+                    socket.emit('auth', {wallet: inputWallet.value, token: "YAY!"});
                 }
                 else
                 {
