@@ -99,7 +99,16 @@ def auth(data):
 
     # TODO: Remove on production stage
     # Send debug output to exactly this wallet clients
-    socketio.send(f"Auth with wallet {wallet} was successfull", to=wallet)
+    socketio.emit("auth_successfull", f"Auth with wallet {wallet} was successfull", to=wallet)
+
+@socketio.on('get_field')
+def auth(data):
+    wallet = data["wallet"]
+    token = data["token"]
+
+    # TODO: Check wallet and token
+
+    game_server.get_field(wallet)
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, port=5001)

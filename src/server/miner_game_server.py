@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 import os
 import time
 import requests
@@ -12,17 +13,60 @@ GET_COLLECTION_URL = "nft/getCollection"
 GET_ACCOUNT_INFO_URL = "account/getInfo"
 SEARCH_NFT_URL = "nft/searchItems"
 SERVER_SIDE_KEY = os.getenv("SERVER_SIDE_KEY")
+DEFAULT_SCHEMA_ID = 2
 
 TON_NANO_DIVIDER = 1000000000.000
+
+class FieldSchema(ABC):
+    pass
+
+    def __init__(self, schema: str) -> None:
+        self.schema = schema
+
+    @abstractmethod
+    def generate_field(self, dim_x, dim_y):
+        pass
+
+class DefaultSchema(FieldSchema):
+    pass
+
+    def generate_field(self, dim_x, dim_y):
+        pass
 
 class MinerGameServer():
     __db_connection: Connection
     cursor: Cursor
 
     def __init__(self) -> None:
-        self.__db_connection = sqlite3.connect("local.db")
+        # sqlite3.threadsafety = 3
+        self.__db_connection = sqlite3.connect("local.db", check_same_thread=False)
         self.cursor = self.__db_connection.cursor()
-                
+    
+    def get_field(self, wallet):
+        rows = self.cursor.execute(f"SELECT * from fields WHERE wid = '{wallet}' LIMIT 1")
+        row = rows.fetchone()
+        if not row:
+            print("Creating new field")
+            self.create_field(wallet, DEFAULT_SCHEMA_ID)
+
+    def create_field(self, wallet, schema_id):
+        schema_rows = self.cursor.execute(f"SELECT schema from fields_schemas where id = '{schema_id}' LIMIT 1")
+        schema = schema_rows.fetchone()
+        if not schema:
+            print(f"No such schema with id {schema_id}")
+            return
+    
+        schema_map: dict[int, FieldSchema] = {
+            2: DefaultSchema
+        }
+
+        if schema_id not in schema_map:
+            cls = DefaultSchema(schema[0])
+        else: 
+            cls = schema_map[schema_id](schema[0])
+
+        field = cls.generate_field(5, 8)
+
 
     def _request(self, action, params, extra_headers = None):
         url = "/".join([TON_API_URL, TON_API_VERSION, action])
